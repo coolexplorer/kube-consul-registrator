@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using kube_consul_registrator.Extensions;
 using Microsoft.Extensions.Logging;
+using kube_consul_registrator.Repositories;
 
 namespace kube_consul_registrator
 {
@@ -31,8 +32,9 @@ namespace kube_consul_registrator
             services.AddCronJob<ConsulRegisterCronJob>(c => 
             {
                 c.TimeZoneInfo = TimeZoneInfo.Local;
-                c.CronExpression = @"*/30 * * * * *";
+                c.CronExpression = @"*/10 * * * * *";
             });
+            services.AddSingleton<IKubernetesRepository, KubernetesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,18 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using kube_consul_registrator.Configurations;
+using kube_consul_registrator.Models;
+using kube_consul_registrator.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace kube_consul_registrator.Services 
 {
     public class ConsulRegisterCronJob : CronJobService 
     {
+        private readonly IKubernetesRepository _kubeRepo;
         private readonly ILogger<ConsulRegisterCronJob> _logger;
 
-        public ConsulRegisterCronJob (IScheduleConfig<ConsulRegisterCronJob> config, ILogger<ConsulRegisterCronJob> logger) 
+        public ConsulRegisterCronJob (IScheduleConfig<ConsulRegisterCronJob> config, IKubernetesRepository kubeRepo, ILogger<ConsulRegisterCronJob> logger) 
             : base(config.CronExpression, config.TimeZoneInfo)
         {
+            _kubeRepo = kubeRepo;
             _logger = logger;
         }
 
@@ -22,11 +28,13 @@ namespace kube_consul_registrator.Services
             return base.StartAsync(cancellationToken);
         }
 
-        public override Task RunWork(CancellationToken cancellationToken)
+        public override async Task RunWork(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Consul register cronjob is working");
+            _logger.LogInformation($"Gethering pod information from kubernetes");
+            
+            var pods = await _kubeRepo.GetPods("qe-tools");
 
-            return Task.CompletedTask;
+            
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
@@ -34,7 +42,5 @@ namespace kube_consul_registrator.Services
             _logger.LogInformation("Consul register job is stopping");
             return base.StopAsync(cancellationToken);
         }
-
-
     }
 }
