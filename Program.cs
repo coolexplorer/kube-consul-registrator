@@ -18,6 +18,11 @@ namespace kube_consul_registrator
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) => 
+                {
+                    config.AddJsonFile("appsettings.json");
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
