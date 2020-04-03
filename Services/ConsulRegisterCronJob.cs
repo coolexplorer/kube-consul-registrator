@@ -65,22 +65,17 @@ namespace kube_consul_registrator.Services
             // Pod has annotation && Not exist consul
             // Get Registration list
             var enabledPods = _kubernetesHelper.GetConsulRegisterEnabledPods();
-            var registerCandidates = GetRegisterCandidates(consulServices, enabledPods);
+            var registerCandidates = _consulServiceHelper.GetRegisterCandidates(enabledPods);
 
 
             // Check the information for registration
             // Exist consul && (No annotation || Not exist pod)
             // Get Deregistration list
             var disabledPods = _kubernetesHelper.GetConsulRegisterDisabledPods();
-            var deRegisterCandidates = GetDeregisterCandidates(consulServices, enabledPods);
+            var deRegisterCandidates = _consulServiceHelper.GetDeregisterCandidates(disabledPods);
 
-            // Make the service registration cadidates and deregistration candidates            
-
-            // Consul registration
-            _consulServiceHelper.CreateRegitration();
-
-            RegisterConsulService(consulRegistrationDto);
-            DeregisterConsulService(consulRegistrationDto.ID);
+            RegisterConsulService(registerCandidates);
+            DeregisterConsulService(deRegisterCandidates);
 
         }
 
@@ -90,38 +85,46 @@ namespace kube_consul_registrator.Services
             return base.StopAsync(cancellationToken);
         }
 
-        private async void RegisterConsulService(ConsulRegistrationDto consulRegistrationDto)
+        private void RegisterConsulService(List<PodInfo> registerCandidates)
         {
-            var registration = _mapper.Map<AgentServiceRegistration>(consulRegistrationDto);
+            registerCandidates.ForEach(async pod => {
+                var consulRegistrationDto = _consulServiceHelper.CreateRegitration(pod);
 
-            if (!_consulServiceHelper.CheckExistService(registration.ID))
-            {
-                var result = await _consul.RegisterService(registration);
-                if (result == HttpStatusCode.OK)
+                var registration = _mapper.Map<AgentServiceRegistration>(consulRegistrationDto);
+
+                if (!_consulServiceHelper.CheckExistService(registration.ID))
                 {
-                    _logger.LogInformation($"Result : {result.ToString()} - {registration.ID} service is resgistered.");
+                    var result = await _consul.RegisterService(registration);
+                    if (result == HttpStatusCode.OK)
+                    {
+                        _logger.LogInformation($"Result : {result.ToString()} - {registration.ID} service is resgistered.");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Result : {result.ToString()} - {registration.ID} service registration is Failed!!");
+                    }
                 }
-                else
-                {
-                    _logger.LogError($"Result : {result.ToString()} - {registration.ID} service registration is Failed!!");
-                }
-            }
+            });
         }
 
-        private async void DeregisterConsulService(string id)
+        private void DeregisterConsulService(List<PodInfo> deRegisterCandidates)
         {
-            if (_consulServiceHelper.CheckExistService(id))
-            {
-                var result = await _consul.DeregisterService(id);
-                if (result == HttpStatusCode.OK)
+            deRegisterCandidates.ForEach(async pod => {
+                var id = pod.Name;
+
+                if (_consulServiceHelper.CheckExistService(id))
                 {
-                    _logger.LogInformation($"Result : {result.ToString()} - {id} service is deresgistered.");
+                    var result = await _consul.DeregisterService(id);
+                    if (result == HttpStatusCode.OK)
+                    {
+                        _logger.LogInformation($"Result : {result.ToString()} - {id} service is deresgistered.");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Result : {result.ToString()} - {id} service deregistration is Failed!!");
+                    }
                 }
-                else
-                {
-                    _logger.LogError($"Result : {result.ToString()} - {id} service deregistration is Failed!!");
-                }
-            }
+            });
         }
     }
 }

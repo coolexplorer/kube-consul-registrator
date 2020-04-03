@@ -39,5 +39,19 @@ namespace kube_consul_registrator.Helpers
                 Port = podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT_ANNOTATION) ? Convert.ToInt32(podInfo.Annotations[Annotations.SERVICE_PORT_ANNOTATION]) : Convert.ToInt32(podInfo.Port)
             };
         }
+
+        public List<PodInfo> GetRegisterCandidates(List<PodInfo> enabledPods)
+        {
+            var podNames = enabledPods.Where(p => !_consulServices.Keys.Contains(p.Name)).ToList();
+            
+            return podNames;
+        }
+
+        public List<PodInfo> GetDeregisterCandidates(List<PodInfo> disabledPods)
+        {
+            var podNames = disabledPods.Where(p => _consulServices.Keys.Contains(p.Name)).ToList();
+
+            return podNames;
+        }
     }
 }
