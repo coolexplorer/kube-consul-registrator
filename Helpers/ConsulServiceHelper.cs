@@ -29,17 +29,6 @@ namespace kube_consul_registrator.Helpers
             return _consulServices.Keys.ToList();
         }
 
-        public ConsulRegistrationDto CreateRegitration(PodInfo podInfo)
-        {
-            return new ConsulRegistrationDto
-            {
-                ID = podInfo.Annotations.Keys.Contains(Annotations.SERVICE_ID_ANNOTATION) ? podInfo.Annotations[Annotations.SERVICE_ID_ANNOTATION] : podInfo.Id,
-                Name = podInfo.Annotations.Keys.Contains(Annotations.SERVICE_NAME_ANNOTATION) ? podInfo.Annotations[Annotations.SERVICE_NAME_ANNOTATION] : podInfo.Name,
-                Address = podInfo.Ip,
-                Port = podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT_ANNOTATION) ? Convert.ToInt32(podInfo.Annotations[Annotations.SERVICE_PORT_ANNOTATION]) : Convert.ToInt32(podInfo.Port)
-            };
-        }
-
         public List<PodInfo> GetRegisterCandidates(List<PodInfo> enabledPods)
         {
             var podNames = enabledPods.Where(p => !_consulServices.Keys.Contains(p.Name)).ToList();
@@ -52,6 +41,77 @@ namespace kube_consul_registrator.Helpers
             var podNames = disabledPods.Where(p => _consulServices.Keys.Contains(p.Name)).ToList();
 
             return podNames;
+        }
+
+        public ConsulRegistrationDto CreateRegitration(PodInfo podInfo)
+        {
+            string serviceId = null, serviceName = null;
+            int servicePort = 0;
+
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_ID_ANNOTATION))
+            {
+                serviceId = podInfo.Annotations[Annotations.SERVICE_ID_ANNOTATION];
+            }
+            else
+            {
+                serviceId = podInfo.Id;
+            }
+
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_NAME_ANNOTATION))
+            {
+                serviceName = podInfo.Annotations[Annotations.SERVICE_NAME_ANNOTATION];
+            }
+            else
+            {
+                serviceName = podInfo.Name;
+            }
+
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT_ANNOTATION))
+            {
+                servicePort = Convert.ToInt32(podInfo.Annotations[Annotations.SERVICE_PORT_ANNOTATION]);
+            }
+            else
+            {
+                servicePort = Convert.ToInt32(podInfo.Port);
+            }
+
+            return new ConsulRegistrationDto
+            {
+                ID =  serviceId,
+                Name = serviceName,
+                Address = podInfo.Ip,
+                Port = servicePort,
+                Meta = ParseServiceMetaData(podInfo)
+            };
+        }
+
+        public IDictionary<string, string> ParseServiceMetaData(PodInfo pod)
+        {
+            Dictionary<string, string> meta = new Dictionary<string, string>();
+
+            if (ExistMetaAnnotation(pod))
+            {
+                pod.Annotations.Keys
+                .Where(k => k.Contains(Annotations.SERVICE_METADATA_ANNOTATION)).ToList()
+                .ForEach(k => {
+                    meta.Add(k.Replace(Annotations.SERVICE_METADATA_ANNOTATION, ""), pod.Annotations[k]);
+                });
+            }
+            
+            return meta;
+        }
+
+        public bool ExistMetaAnnotation(PodInfo pod)
+        {
+            foreach(string key in pod.Annotations.Keys)
+            {
+                if (key.Contains(Annotations.SERVICE_METADATA_ANNOTATION))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
