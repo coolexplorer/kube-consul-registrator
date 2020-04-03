@@ -48,7 +48,7 @@ spec:
       serviceAccountName: consul-register
       containers:
       - name: consul-register
-        image: allenkim-qe/kube-consul-registrator:latest
+        image: coolexplorer/kube-consul-registrator:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
