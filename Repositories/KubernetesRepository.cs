@@ -16,7 +16,7 @@ namespace kube_consul_registrator.Repositories
             _client = new Kubernetes(KubernetesClientConfiguration.InClusterConfig());
         }
 
-        public async Task<IEnumerable<PodInfo>> GetPods(string ns = "defualt")
+        public async Task<IEnumerable<PodInfo>> GetPods(string ns = "default")
         {
             var pods = await _client.ListNamespacedPodAsync(ns);
 
@@ -27,6 +27,7 @@ namespace kube_consul_registrator.Repositories
                     Name = pods.Metadata.Name,
                     NodeName = pods.Spec.NodeName,
                     Ip = pods.Status.PodIP,
+                    Phase = pods.Status.Phase,
                     Annotations = pods.Metadata.Annotations
                 });
         }

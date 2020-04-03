@@ -1,0 +1,10 @@
+namespace kube_consul_registrator.Const
+{
+    public static class Annotations
+    {
+        public const string EABLED_ANNOTATION = "consul-registrator/enabled";
+        public const string SERVICE_ID_ANNOTATION = "consul-registrator/service-id";
+        public const string SERVICE_NAME_ANNOTATION = "consul-registrator/service-name";
+        public const string SERVICE_PORT_ANNOTATION = "consul-registrator/service-port";
+    }
+}

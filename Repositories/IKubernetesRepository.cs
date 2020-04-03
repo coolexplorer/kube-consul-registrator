@@ -8,6 +8,6 @@ namespace kube_consul_registrator.Repositories
 {
     public interface IKubernetesRepository
     {
-         Task<IEnumerable<PodInfo>> GetPods(string ns = "defualt");
+         Task<IEnumerable<PodInfo>> GetPods(string ns = "default");
     }
 }

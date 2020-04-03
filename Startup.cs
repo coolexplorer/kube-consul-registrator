@@ -37,7 +37,7 @@ namespace kube_consul_registrator
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/10 * * * * *";
             });
-            //services.AddSingleton<IKubernetesRepository, KubernetesRepository>();
+            services.AddSingleton<IKubernetesRepository, KubernetesRepository>();
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig => 
             {
                 var address = Configuration.GetValue<string>("Consul:Address");
