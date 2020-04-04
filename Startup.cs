@@ -1,21 +1,16 @@
 using System.Reflection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using kube_consul_registrator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using kube_consul_registrator.Extensions;
-using Microsoft.Extensions.Logging;
 using kube_consul_registrator.Repositories;
 using Consul;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace kube_consul_registrator
 {
