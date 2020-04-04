@@ -25,7 +25,6 @@ namespace kube_consul_registrator.Services
         private KubernetesHelper _kubernetesHelper;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        IEnumerable<PodInfo> _pods;
 
         public ConsulRegisterCronJob(IScheduleConfig<ConsulRegisterCronJob> scheduleConfig, IConfiguration config, IKubernetesRepository kubeRepo,
             IConsulRepository consul, IMapper mapper, ILogger<ConsulRegisterCronJob> logger) : base(scheduleConfig.CronExpression, scheduleConfig.TimeZoneInfo)
@@ -45,44 +44,76 @@ namespace kube_consul_registrator.Services
 
         public override async Task RunWork(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Gethering pod information from kubernetes");
+            _logger.LogDebug($"Gethering pod information from kubernetes");
 
             var consulServices = await _consul.GetServices();
 
-            _logger.LogInformation($"Got services from Consul");
-
-            _logger.LogInformation($"Allowed namespace: {EnvironmentVariables.AllowedNamespaces}");
+             _logger.LogDebug("consulServices: [{0}]", string.Join(",", consulServices.Select(s => s.Key).ToArray()));
 
             var namespaces = EnvironmentVariables.AllowedNamespaces;
+
+            IEnumerable<PodInfo> wholePods = null;
             
             foreach(string ns in namespaces)
             {
-                var pods = await _kubeRepo.GetPods(ns);
-                _pods = _pods.Concat(pods);
-            } 
+                _logger.LogDebug($"Get Pods from {ns}");
 
-            _logger.LogInformation($"Got pods information from Kubernetes");
+                var pods = await _kubeRepo.GetPods(ns);
+                
+                if (pods != null)
+                {
+                    if (wholePods == null)
+                    {
+                        wholePods = pods;
+                    }
+                    else
+                    {
+                        wholePods.Concat(pods);
+                    }
+                }
+
+                _logger.LogDebug("Pods: [{0}]", string.Join(",", wholePods.Select(p => p.Name).ToArray()));
+            }
+
+            _logger.LogDebug($"Got pods information from Kubernetes");
 
             _consulServiceHelper = new ConsulServiceHelper(consulServices);
-            _kubernetesHelper = new KubernetesHelper(_pods);
+            _kubernetesHelper = new KubernetesHelper(wholePods);
 
-            // Get Kubernetes Pod information
-            // Check annotation for register
-            // Pod has annotation && Not exist consul
-            // Get Registration list
             var enabledPods = _kubernetesHelper.GetConsulRegisterEnabledPods();
+
+            _logger.LogDebug("enabledPods: [{0}]", string.Join(",", enabledPods.Select(p => p.Name).ToArray()));
+
             var registerCandidates = _consulServiceHelper.GetRegisterCandidates(enabledPods);
 
+            _logger.LogDebug("registerCandidates: [{0}]", string.Join(",", registerCandidates.Select(p => p.Name).ToArray()));
 
-            // Check the information for registration
-            // Exist consul && (No annotation || Not exist pod)
-            // Get Deregistration list
             var disabledPods = _kubernetesHelper.GetConsulRegisterDisabledPods();
+
+            _logger.LogDebug("disabledPods: [{0}]", string.Join(",", disabledPods.Select(p => p.Name).ToArray()));
+
             var deRegisterCandidates = _consulServiceHelper.GetDeregisterCandidates(disabledPods);
 
-            RegisterConsulService(registerCandidates);
-            DeregisterConsulService(deRegisterCandidates);
+            _logger.LogDebug("deRegisterCandidates: [{0}]", string.Join(",", deRegisterCandidates));
 
+            var deletedPods = _consulServiceHelper.GetDeletedPods(wholePods.ToList());
+
+            _logger.LogDebug("deletedPods: [{0}]", string.Join(",", deletedPods));
+
+            if (registerCandidates != null)
+            {
+                RegisterConsulService(registerCandidates);
+            }
+
+            if (deRegisterCandidates != null)
+            {
+                DeregisterConsulService(deRegisterCandidates);
+            }
+
+            if (deletedPods != null)
+            {
+                DeregisterConsulService(deletedPods);
+            }
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
@@ -113,10 +144,9 @@ namespace kube_consul_registrator.Services
             });
         }
 
-        private void DeregisterConsulService(List<PodInfo> deRegisterCandidates)
+        private void DeregisterConsulService(List<string> deRegisterCandidates)
         {
-            deRegisterCandidates.ForEach(async pod => {
-                var id = pod.Name;
+            deRegisterCandidates.ForEach(async id => {
 
                 if (_consulServiceHelper.CheckExistService(id))
                 {
