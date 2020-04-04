@@ -48,7 +48,12 @@ namespace kube_consul_registrator.Services
             _logger.LogInformation($"Gethering pod information from kubernetes");
 
             var consulServices = await _consul.GetServices();
-            var namespaces = _config.GetValue<string[]>("Kube:AllowedNameSpaces");
+
+            _logger.LogInformation($"Got services from Consul");
+
+            _logger.LogInformation($"Allowed namespace: {EnvironmentVariables.AllowedNamespaces}");
+
+            var namespaces = EnvironmentVariables.AllowedNamespaces;
             
             foreach(string ns in namespaces)
             {
@@ -56,7 +61,8 @@ namespace kube_consul_registrator.Services
                 _pods = _pods.Concat(pods);
             } 
 
-            // Gether Consul services
+            _logger.LogInformation($"Got pods information from Kubernetes");
+
             _consulServiceHelper = new ConsulServiceHelper(consulServices);
             _kubernetesHelper = new KubernetesHelper(_pods);
 
