@@ -23,7 +23,6 @@ namespace kube_consul_registrator.Repositories
             return pods.Items.Select(pods =>
                 new PodInfo
                 {
-                    Id = pods.Metadata.Uid,
                     Name = pods.Metadata.Name,
                     NodeName = pods.Spec.NodeName,
                     Ip = pods.Status.PodIP,

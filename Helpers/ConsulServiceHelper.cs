@@ -36,12 +36,12 @@ namespace kube_consul_registrator.Helpers
 
         public List<string> GetDeregisterCandidates(List<PodInfo> disabledPods)
         {
-            return disabledPods.Where(p => _consulServices.Keys.Contains(p.Name)).Select(p => p.Id).ToList();
+            return disabledPods.Where(p => _consulServices.Keys.Contains(p.Name)).Select(p => p.Name).ToList();
         }
 
         public List<string> GetDeletedPods(List<PodInfo> wholePods)
         {
-            var podIds = wholePods.Select(p => p.Id).ToList();
+            var podIds = wholePods.Select(p => p.Name).ToList();
 
             return _consulServices?.Keys.Where(k => !podIds.Contains(k)).ToList();
         }
