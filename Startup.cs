@@ -1,21 +1,17 @@
+using System.Linq;
 using System.Reflection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using kube_consul_registrator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using kube_consul_registrator.Extensions;
-using Microsoft.Extensions.Logging;
 using kube_consul_registrator.Repositories;
 using Consul;
 using AutoMapper;
+using kube_consul_registrator.Configurations;
 
 namespace kube_consul_registrator
 {
@@ -24,6 +20,7 @@ namespace kube_consul_registrator
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            GetEnvironmentVaraibles();
         }
 
         public IConfiguration Configuration { get; }
@@ -37,11 +34,10 @@ namespace kube_consul_registrator
                 c.TimeZoneInfo = TimeZoneInfo.Local;
                 c.CronExpression = @"*/10 * * * * *";
             });
-            //services.AddSingleton<IKubernetesRepository, KubernetesRepository>();
+            services.AddSingleton<IKubernetesRepository, KubernetesRepository>();
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig => 
             {
-                var address = Configuration.GetValue<string>("Consul:Address");
-                consulConfig.Address = new Uri("http://" + address);
+                consulConfig.Address = new Uri("http://" + EnvironmentVariables.ConsulAddress);
             }));
             services.AddSingleton<IConsulRepository, ConsulRepository>();
             services.AddAutoMapper(Assembly.GetAssembly(this.GetType()));
@@ -65,6 +61,31 @@ namespace kube_consul_registrator
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void GetEnvironmentVaraibles()
+        {
+            var allowedNamespaces = Environment.GetEnvironmentVariable("KUBE_ALLOWED_NAMESPACES");
+
+            if (allowedNamespaces == null)
+            {
+                EnvironmentVariables.AllowedNamespaces = Configuration.GetValue<string>("Kube:AllowedNameSpaces").Split(",");
+            } else 
+            {
+                EnvironmentVariables.AllowedNamespaces = allowedNamespaces.Split(",");
+            }
+
+            
+
+            EnvironmentVariables.ConsulAddress = Environment.GetEnvironmentVariable("CONSUL_ADDRESS");
+
+            if (EnvironmentVariables.ConsulAddress == null)
+            {
+                EnvironmentVariables.ConsulAddress = Configuration.GetValue<string>("Consul:Address");
+            } 
+
+            Console.WriteLine($"CONSUL_ADDRESS: {EnvironmentVariables.ConsulAddress}");
+            Console.WriteLine("KUBE_ALLOWED_NAMESPACES: [{0}]", string.Join(",", EnvironmentVariables.AllowedNamespaces));
         }
     }
 }
