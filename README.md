@@ -9,7 +9,7 @@
 ### Prerequisites
 
 - Kubernetes cluster
-- Consul server
+- Consul server : [docker-compose example](/docker/consul/docker-compose.yml)
 
 ### Annotations
 
@@ -57,18 +57,19 @@ spec:
 ### Installing
 
 To use this service, you need to create kube-consul-registrator pod with authorization to get the cluster information from the cluster. Please refer to the files that I added in the repository.
-- [Deployment definition]()
-- [Service definition]()
-- [Service Account definition]()
-- [ClusterRoleBinding definition]()
-- [ClusterRole]()
+- [Deployment definition](k8s/kube-consul-registrator.yaml)
+- [Service definition](k8s/kube-consul-registrator.yaml)
+- [Service Account definition](k8s/kube-consul-registrator.yaml)
+- [ClusterRoleBinding definition](k8s/kube-consul-registrator.yaml)
+- [ClusterRole](k8s/kube-consul-registrator.yaml)
 
 ## Built With
 
-- Kubernetes C# Client 
-- Consul client 
+- [Kubernetes C# Client](https://github.com/kubernetes-client/csharp) 
+- [Consul client](https://github.com/PlayFab/consuldotnet)
 
 ## Authors
+- Allen Kim - Initial work - [coolexplorer](https://github.com/coolexplorer)
 
 ## License
 
