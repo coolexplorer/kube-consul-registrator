@@ -28,7 +28,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: consul-register-deployment
-  namespace: qe-tools
+  namespace: default
 spec:
   selector:
     matchLabels:
