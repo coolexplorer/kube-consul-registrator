@@ -65,8 +65,8 @@ To use this service, you need to create kube-consul-registrator pod with authori
 
 ## Built With
 
-- Kubernetes C# Client library
-- Consul client library
+- Kubernetes C# Client 
+- Consul client 
 
 ## Authors
 
