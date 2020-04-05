@@ -27,6 +27,7 @@ namespace kube_consul_registrator.Repositories
                     NodeName = pods.Spec.NodeName,
                     Ip = pods.Status.PodIP,
                     Phase = pods.Status.Phase,
+                    Port = pods.Spec.Containers.Select(c => c.Ports).FirstOrDefault().Select(c =>  c.ContainerPort).FirstOrDefault(),
                     Annotations = pods.Metadata.Annotations
                 });
         }
