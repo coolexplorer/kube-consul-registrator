@@ -147,7 +147,6 @@ namespace kube_consul_registrator.Services
         private void DeregisterConsulService(List<string> deRegisterCandidates)
         {
             deRegisterCandidates.ForEach(async id => {
-
                 if (_consulServiceHelper.CheckExistService(id))
                 {
                     var result = await _consul.DeregisterService(id);

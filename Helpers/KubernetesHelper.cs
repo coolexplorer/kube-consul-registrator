@@ -31,7 +31,6 @@ namespace kube_consul_registrator.Helpers
             var unAnnotatedPods = _podInfo?.
                             Where(p => p.Annotations == null || !p.Annotations.Keys.Contains(Annotations.EABLED_ANNOTATION));
 
-
             return disabledPds?.Concat(unAnnotatedPods)?.ToList();
         }
     }
