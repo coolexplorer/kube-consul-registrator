@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Consul;
-using kube_consul_registrator.Models;
 
 namespace kube_consul_registrator.Repositories
 {
