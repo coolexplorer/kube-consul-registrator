@@ -1,3 +1,5 @@
+[![dockeri.co](https://dockeri.co/image/coolexplorer/kube-consul-registrator)](https://hub.docker.com/r/coolexplorer/kube-consul-registrator)
+
 # kube-consul-registrator
 
 ## What is the kub-consul-registrator?
