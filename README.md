@@ -1,5 +1,6 @@
 [![dockeri.co](https://dockeri.co/image/coolexplorer/kube-consul-registrator)](https://hub.docker.com/r/coolexplorer/kube-consul-registrator)
 
+![.NET Core](https://github.com/coolexplorer/kube-consul-registrator/workflows/.NET%20Core/badge.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator/badge)](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator)
 
 # kube-consul-registrator
