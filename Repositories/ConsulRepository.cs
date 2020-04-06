@@ -41,6 +41,5 @@ namespace kube_consul_registrator.Repositories
 
             return result.StatusCode;
         }
-
     }
 }

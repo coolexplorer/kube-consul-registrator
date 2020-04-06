@@ -75,8 +75,6 @@ namespace kube_consul_registrator
                 EnvironmentVariables.AllowedNamespaces = allowedNamespaces.Split(",");
             }
 
-            
-
             EnvironmentVariables.ConsulAddress = Environment.GetEnvironmentVariable("CONSUL_ADDRESS");
 
             if (EnvironmentVariables.ConsulAddress == null)
