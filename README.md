@@ -1,4 +1,5 @@
 [![dockeri.co](https://dockeri.co/image/coolexplorer/kube-consul-registrator)](https://hub.docker.com/r/coolexplorer/kube-consul-registrator)
+[![CodeFactor](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator/badge)](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator)
 
 # kube-consul-registrator
 
