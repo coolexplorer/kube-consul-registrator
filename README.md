@@ -68,7 +68,7 @@ spec:
         - containerPort: 80
         env:
         - name: CONSUL_ADDRESS
-          value: {{ .Values.consul.address }}
+          value: "consul:8500"
         - name: KUBE_ALLOWED_NAMESPACES
           value: "qe-tools,monitoring"
         - name : Logging__LogLevel__Default
