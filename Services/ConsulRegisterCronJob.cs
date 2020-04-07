@@ -68,7 +68,7 @@ namespace kube_consul_registrator.Services
                     }
                     else
                     {
-                        wholePods.Concat(pods);
+                        wholePods = wholePods.Concat(pods);
                     }
                 }
 
