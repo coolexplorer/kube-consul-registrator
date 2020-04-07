@@ -31,7 +31,7 @@ namespace kube_consul_registrator.Helpers
 
         public List<PodInfo> GetRegisterCandidates(List<PodInfo> enabledPods)
         {
-            return enabledPods.Where(p => !_consulServices.Keys.Contains(p.Name)).ToList();
+            return enabledPods.Where(p => p.Phase == PodPhase.RUNNING && !_consulServices.Keys.Contains(p.Name)).ToList();
         }
 
         public List<string> GetDeregisterCandidates(List<PodInfo> disabledPods)
