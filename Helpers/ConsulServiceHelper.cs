@@ -75,7 +75,16 @@ namespace kube_consul_registrator.Helpers
             }
             else
             {
-                servicePort = Convert.ToInt32(podInfo.Port);
+                var container = podInfo.Containers.Where(c => c.Ports != null).FirstOrDefault();
+
+                if (container.Ports != null)
+                {
+                    servicePort = container.Ports.Select(p => p.ContainerPort).FirstOrDefault();
+                }
+                else
+                {
+                    servicePort = 80;
+                }
             }
 
             return new ConsulRegistrationDto
