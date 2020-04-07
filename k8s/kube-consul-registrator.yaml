@@ -20,6 +20,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        env:
+          - name: CONSUL_ADDRESS
+            value: "consul:8500"
 ---
 apiVersion: v1
 kind: Service
