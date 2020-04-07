@@ -21,8 +21,12 @@ spec:
         ports:
         - containerPort: 80
         env:
-          - name: CONSUL_ADDRESS
-            value: "consul:8500"
+        - name: CONSUL_ADDRESS
+          value: "consul:8500"
+        - name: KUBE_ALLOWED_NAMESPACES
+          value: "qe-tools,monitoring"
+        - name : Logging__LogLevel__Default
+          value: "Debug"
 ---
 apiVersion: v1
 kind: Service

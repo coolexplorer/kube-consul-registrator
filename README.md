@@ -17,6 +17,14 @@
 - Kubernetes cluster
 - Consul server : [docker-compose example](/docker/consul/docker-compose.yml)
 
+### Environment variables
+
+| Envrionment variable | Explaination | Example |
+|---|:---:|:---:|
+| CONSUL_ADDRESS | Consul address in the cluster |  "consul:8500" |
+| KUBE_ALLOWED_NAMESPACES | Namespaces to register pods | "default,namespace1"
+
+
 ### Annotations
 
 These are annotation samples when you want to add a pod in the consul. You should add this annotations on the metadata of a pod. (Do not add this on the metadata of Deployment, ReplicaSet, StatefulSet, and DaemonSet)
@@ -58,6 +66,13 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        env:
+        - name: CONSUL_ADDRESS
+          value: {{ .Values.consul.address }}
+        - name: KUBE_ALLOWED_NAMESPACES
+          value: "qe-tools,monitoring"
+        - name : Logging__LogLevel__Default
+          value: "Debug"
 ```
 
 ### Installing
