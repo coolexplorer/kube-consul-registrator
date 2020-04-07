@@ -44,7 +44,7 @@ metadata:
   labels:
     app: consul-register
   name: consul-register
-  namespace: qe-tools
+  namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -85,17 +85,17 @@ rules:
   - daemonsets
   - deployments
   - replicasets
-  verbs: ["list", "watch"]
+  verbs: ["list", "watch", "get"]
 - apiGroups: ["apps"]
   resources:
   - statefulsets
-  verbs: ["list", "watch"]
+  verbs: ["list", "watch", "get"]
 - apiGroups: ["batch"]
   resources:
   - cronjobs
   - jobs
   verbs: ["list", "watch"]
-- apiGroups: ["autoscaling"]
+- apiGroups: ["autoscaling", "get"]
   resources:
   - horizontalpodautoscalers
-  verbs: ["list", "watch"]
+  verbs: ["list", "watch", "get"]
