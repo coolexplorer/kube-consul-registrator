@@ -57,7 +57,7 @@ spec:
         consul-registrator/service-id: foo
         consul-registrator/service-name: bar
         consul-registrator/service-port: 80
-        consul-registrator/service-meta/type:test
+        consul-registrator/service-meta-type:test           # add metadata [type:test]
     spec:
       serviceAccountName: consul-register
       containers:
