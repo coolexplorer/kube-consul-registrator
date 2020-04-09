@@ -19,6 +19,6 @@ jobs:
       with:
         image: coolexplorer/kube-consul-registrator
         registry: docker.io
-        dockerfile: Dockerfile
+        dockerfile: kube-consul-registrator/Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
