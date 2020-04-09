@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Consul;
@@ -5,6 +7,8 @@ using kube_consul_registrator.Const;
 using kube_consul_registrator.Helpers;
 using kube_consul_registrator.Models;
 using Xunit;
+using kube_consul_registrator.Dtos;
+using Newtonsoft.Json;
 
 namespace kube_consul_registrator.Tests
 {
@@ -27,13 +31,56 @@ namespace kube_consul_registrator.Tests
         [Fact]
         public void GetRegisterCandidates_ReturnPodInfoList()
         {
-            var cadidates = _consulHelper.GetRegisterCandidates(GetTestEnabledPods());
+            var cadidates = _consulHelper.GetRegisterCandidates(GetTestPods());
 
             var result = Assert.IsType<List<PodInfo>>(cadidates);
             Assert.Single(result);
         }
 
-        private List<PodInfo> GetTestEnabledPods()
+        [Fact]
+        public void GetDeregisterCandidates_ReturnPodInfoList()
+        {
+            var cadidates = _consulHelper.GetDeregisterCandidates(GetTestPods());
+
+            var result = Assert.IsType<List<string>>(cadidates);
+            Assert.Single(result);
+        }
+
+        [Fact]
+        public void GetDeletedPods_ReturnPodInfoList()
+        {
+            var cadidates = _consulHelper.GetDeletedPods(GetTestPods());
+
+            var result = Assert.IsType<List<string>>(cadidates);
+            Assert.Single(result);
+        }
+
+        [Fact]
+        public void CreateRegitration_ReturnConsulRegistrationDto()
+        {
+            var registrationDto = _consulHelper.CreateRegitration(GetTestPods().First());
+
+            var result = Assert.IsType<ConsulRegistrationDto>(registrationDto);
+
+            var expectedDto = new ConsulRegistrationDto()
+                            {
+                                ID = "pushgateway",
+                                Name = "pushgateway",
+                                Address = "127.0.0.1",
+                                Port = 80,
+                                Meta = new Dictionary<string, string>()
+                                {
+                                    {"test", "test"}
+                                }
+                            };
+                            
+            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj2Str = JsonConvert.SerializeObject(result);
+
+            Assert.True(obj1Str.Equals(obj2Str));
+        }
+
+        private List<PodInfo> GetTestPods()
         {
             return new List<PodInfo>()
             {
@@ -46,7 +93,8 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.RUNNING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {"MajorVersion", "1"}
+                        {"consul-registrator/enabled", "true"},
+                        {"consul-registrator/service-meta-test", "test"}
                     }
                 },
                 new PodInfo()
@@ -58,7 +106,7 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {"MajorVersion", "0"}
+                        {"consul-registrator/enabled", "true"}
                     }
                 }
             };
