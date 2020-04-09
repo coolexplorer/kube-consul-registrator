@@ -75,9 +75,9 @@ namespace kube_consul_registrator.Helpers
             }
             else
             {
-                var container = podInfo.Containers.Where(c => c.Ports != null).FirstOrDefault();
+                var container = podInfo.Containers?.Where(c => c.Ports != null).FirstOrDefault();
 
-                if (container.Ports != null)
+                if (container?.Ports != null)
                 {
                     servicePort = container.Ports.Select(p => p.ContainerPort).FirstOrDefault();
                 }
