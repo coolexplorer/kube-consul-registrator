@@ -35,7 +35,7 @@ consul-registrator/enabled: true
 consul-registrator/service-id: foo
 consul-registrator/service-name: bar
 consul-registrator/service-port: 80
-consul-registrator/service-meta/<key>:<value>
+consul-registrator/service-meta-<key>:<value>
 ```
 Kubernetes definistion example
 ```
