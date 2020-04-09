@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: tag env
-      run: echo ::set-env name=RELEASE_VERSION::$(echo {GITHUB_REF#ref/*/})
+      run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF#ref/*/})
     - name: docker build & push
       uses: mr-smithers-excellent/docker-build-push@v2
       with:
