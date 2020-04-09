@@ -4,6 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator/badge)](https://www.codefactor.io/repository/github/coolexplorer/kube-consul-registrator)
 [![codecov](https://codecov.io/gh/coolexplorer/kube-consul-registrator/branch/master/graph/badge.svg)](https://codecov.io/gh/coolexplorer/kube-consul-registrator)
 ![release](https://badgen.net/github/release/coolexplorer/kube-consul-registrator)
+![docker](https://github.com/coolexplorer/kube-consul-registrator/workflows/docker/badge.svg)
 
 # kube-consul-registrator
 
