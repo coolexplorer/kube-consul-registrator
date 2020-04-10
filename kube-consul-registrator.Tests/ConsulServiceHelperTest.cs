@@ -56,7 +56,7 @@ namespace kube_consul_registrator.Tests
         }
 
         [Fact]
-        public void CreateRegitration_ReturnConsulRegistrationDto()
+        public void CreateRegitration_ReturnConsulRegistrationDto1()
         {
             var registrationDto = _consulHelper.CreateRegitration(GetTestPods().First());
 
@@ -73,7 +73,32 @@ namespace kube_consul_registrator.Tests
                                     {"test", "test"}
                                 }
                             };
-                            
+
+            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj2Str = JsonConvert.SerializeObject(result);
+
+            Assert.True(obj1Str.Equals(obj2Str));
+        }
+
+        [Fact]
+        public void CreateRegitration_ReturnConsulRegistrationDto2()
+        {
+            var registrationDto = _consulHelper.CreateRegitration(GetTestPods()[1]);
+
+            var result = Assert.IsType<ConsulRegistrationDto>(registrationDto);
+
+            var expectedDto = new ConsulRegistrationDto()
+                            {
+                                ID = "auth",
+                                Name = "auth",
+                                Address = "127.0.0.1",
+                                Port = 80,
+                                Meta = new Dictionary<string, string>()
+                                {
+                                    {"test", "test"}
+                                }
+                            };
+
             var obj1Str = JsonConvert.SerializeObject(registrationDto);
             var obj2Str = JsonConvert.SerializeObject(result);
 
@@ -93,8 +118,26 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.RUNNING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {"consul-registrator/enabled", "true"},
-                        {"consul-registrator/service-meta-test", "test"}
+                        {Annotations.EABLED_ANNOTATION, "true"},
+                        {Annotations.SERVICE_ID_ANNOTATION, "pushgateway"},
+                        {Annotations.SERVICE_NAME_ANNOTATION, "pushgateway"},
+                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                    }
+                },
+                new PodInfo()
+                {
+                    Name = "auth",
+                    NodeName = "node1",
+                    Ip = "127.0.0.1",
+                    Containers = null,
+                    Phase = PodPhase.PENDING,
+                    Annotations = new Dictionary<string, string>()
+                    {
+                        {Annotations.EABLED_ANNOTATION, "true"},
+                        {Annotations.SERVICE_ID_ANNOTATION, "auth"},
+                        {Annotations.SERVICE_NAME_ANNOTATION, "auth"},
+                        {Annotations.SERVICE_PORT_ANNOTATION, "80"},
+                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
                     }
                 },
                 new PodInfo()
@@ -106,7 +149,7 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {"consul-registrator/enabled", "true"}
+                        {Annotations.EABLED_ANNOTATION, "true"},
                     }
                 }
             };
