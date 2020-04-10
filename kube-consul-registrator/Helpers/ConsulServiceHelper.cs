@@ -50,28 +50,34 @@ namespace kube_consul_registrator.Helpers
         {
             string serviceId = null, serviceName = null;
             int servicePort = 0;
+            string[] tags = new string[]{};
 
-            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_ID_ANNOTATION))
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_ID))
             {
-                serviceId = podInfo.Annotations[Annotations.SERVICE_ID_ANNOTATION];
+                serviceId = podInfo.Annotations[Annotations.SERVICE_ID];
             }
             else
             {
                 serviceId = podInfo.Name;
             }
 
-            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_NAME_ANNOTATION))
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_NAME))
             {
-                serviceName = podInfo.Annotations[Annotations.SERVICE_NAME_ANNOTATION];
+                serviceName = podInfo.Annotations[Annotations.SERVICE_NAME];
             }
             else
             {
                 serviceName = podInfo.Name;
             }
 
-            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT_ANNOTATION))
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_TAG))
             {
-                servicePort = Convert.ToInt32(podInfo.Annotations[Annotations.SERVICE_PORT_ANNOTATION]);
+                tags = tags.Union(podInfo.Annotations[Annotations.SERVICE_TAG].Split(",")).ToArray();
+            }
+
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT))
+            {
+                servicePort = Convert.ToInt32(podInfo.Annotations[Annotations.SERVICE_PORT]);
             }
             else
             {
@@ -93,6 +99,7 @@ namespace kube_consul_registrator.Helpers
                 Name = serviceName,
                 Address = podInfo.Ip,
                 Port = servicePort,
+                Tags = tags,
                 Meta = ParseServiceMetaData(podInfo)
             };
         }
@@ -104,9 +111,9 @@ namespace kube_consul_registrator.Helpers
             if (ExistMetaAnnotation(pod))
             {
                 pod.Annotations.Keys
-                .Where(k => k.Contains(Annotations.SERVICE_METADATA_ANNOTATION)).ToList()
+                .Where(k => k.Contains(Annotations.SERVICE_METADATA)).ToList()
                 .ForEach(k => {
-                    meta.Add(k.Replace(Annotations.SERVICE_METADATA_ANNOTATION, ""), pod.Annotations[k]);
+                    meta.Add(k.Replace(Annotations.SERVICE_METADATA, ""), pod.Annotations[k]);
                 });
             }
             
@@ -117,7 +124,7 @@ namespace kube_consul_registrator.Helpers
         {
             foreach(string key in pod.Annotations.Keys)
             {
-                if (key.Contains(Annotations.SERVICE_METADATA_ANNOTATION))
+                if (key.Contains(Annotations.SERVICE_METADATA))
                 {
                     return true;
                 }

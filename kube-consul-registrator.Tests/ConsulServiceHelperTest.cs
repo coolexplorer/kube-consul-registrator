@@ -68,13 +68,14 @@ namespace kube_consul_registrator.Tests
                                 Name = "pushgateway",
                                 Address = "127.0.0.1",
                                 Port = 80,
+                                Tags = new string[]{},
                                 Meta = new Dictionary<string, string>()
                                 {
                                     {"test", "test"}
                                 }
                             };
 
-            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj1Str = JsonConvert.SerializeObject(expectedDto);
             var obj2Str = JsonConvert.SerializeObject(result);
 
             Assert.True(obj1Str.Equals(obj2Str));
@@ -93,13 +94,14 @@ namespace kube_consul_registrator.Tests
                                 Name = "auth",
                                 Address = "127.0.0.1",
                                 Port = 80,
+                                Tags = new string[]{"tag1", "tag2"},
                                 Meta = new Dictionary<string, string>()
                                 {
                                     {"test", "test"}
                                 }
                             };
 
-            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj1Str = JsonConvert.SerializeObject(expectedDto);
             var obj2Str = JsonConvert.SerializeObject(result);
 
             Assert.True(obj1Str.Equals(obj2Str));
@@ -118,10 +120,10 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.RUNNING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
-                        {Annotations.SERVICE_ID_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_NAME_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                        {Annotations.EABLED, "true"},
+                        {Annotations.SERVICE_ID, "pushgateway"},
+                        {Annotations.SERVICE_NAME, "pushgateway"},
+                        {Annotations.SERVICE_METADATA + "test", "test"}
                     }
                 },
                 new PodInfo()
@@ -133,11 +135,12 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
-                        {Annotations.SERVICE_ID_ANNOTATION, "auth"},
-                        {Annotations.SERVICE_NAME_ANNOTATION, "auth"},
-                        {Annotations.SERVICE_PORT_ANNOTATION, "80"},
-                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                        {Annotations.EABLED, "true"},
+                        {Annotations.SERVICE_ID, "auth"},
+                        {Annotations.SERVICE_NAME, "auth"},
+                        {Annotations.SERVICE_PORT, "80"},
+                        {Annotations.SERVICE_TAG, "tag1,tag2"},
+                        {Annotations.SERVICE_METADATA + "test", "test"}
                     }
                 },
                 new PodInfo()
@@ -149,7 +152,7 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
+                        {Annotations.EABLED, "true"},
                     }
                 }
             };
