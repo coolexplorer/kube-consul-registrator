@@ -120,10 +120,10 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.RUNNING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
-                        {Annotations.SERVICE_ID_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_NAME_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                        {Annotations.EABLED, "true"},
+                        {Annotations.SERVICE_ID, "pushgateway"},
+                        {Annotations.SERVICE_NAME, "pushgateway"},
+                        {Annotations.SERVICE_METADATA + "test", "test"}
                     }
                 },
                 new PodInfo()
@@ -135,12 +135,12 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
-                        {Annotations.SERVICE_ID_ANNOTATION, "auth"},
-                        {Annotations.SERVICE_NAME_ANNOTATION, "auth"},
-                        {Annotations.SERVICE_PORT_ANNOTATION, "80"},
-                        {Annotations.SERVICE_TAG_ANNOTATION, "tag1,tag2"},
-                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                        {Annotations.EABLED, "true"},
+                        {Annotations.SERVICE_ID, "auth"},
+                        {Annotations.SERVICE_NAME, "auth"},
+                        {Annotations.SERVICE_PORT, "80"},
+                        {Annotations.SERVICE_TAG, "tag1,tag2"},
+                        {Annotations.SERVICE_METADATA + "test", "test"}
                     }
                 },
                 new PodInfo()
@@ -152,7 +152,7 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.PENDING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
+                        {Annotations.EABLED, "true"},
                     }
                 }
             };
