@@ -32,11 +32,11 @@
 These are annotation samples when you want to add a pod in the consul. You should add this annotations on the metadata of a pod. (Do not add this on the metadata of Deployment, ReplicaSet, StatefulSet, and DaemonSet)
 
 ```
-consul-registrator/enabled: true
-consul-registrator/service-id: foo
-consul-registrator/service-name: bar
-consul-registrator/service-port: 80
-consul-registrator/service-tag: "tag1,tag2"
+consul-registrator/enabled: <true|false>
+consul-registrator/service-id: <string>
+consul-registrator/service-name: <string>
+consul-registrator/service-port: <string>
+consul-registrator/service-tag: <string[]>
 consul-registrator/service-meta-<key>:<value>
 ```
 Kubernetes definistion example
