@@ -50,6 +50,7 @@ namespace kube_consul_registrator.Helpers
         {
             string serviceId = null, serviceName = null;
             int servicePort = 0;
+            string[] tags = new string[]{};
 
             if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_ID_ANNOTATION))
             {
@@ -67,6 +68,11 @@ namespace kube_consul_registrator.Helpers
             else
             {
                 serviceName = podInfo.Name;
+            }
+
+            if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_TAG_ANNOTATION))
+            {
+                tags = tags.Union(podInfo.Annotations[Annotations.SERVICE_TAG_ANNOTATION].Split(",")).ToArray();
             }
 
             if (podInfo.Annotations.Keys.Contains(Annotations.SERVICE_PORT_ANNOTATION))
@@ -93,6 +99,7 @@ namespace kube_consul_registrator.Helpers
                 Name = serviceName,
                 Address = podInfo.Ip,
                 Port = servicePort,
+                Tags = tags,
                 Meta = ParseServiceMetaData(podInfo)
             };
         }
