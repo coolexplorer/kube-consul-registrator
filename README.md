@@ -10,7 +10,7 @@
 
 ## What is the kub-consul-registrator?
 
-[kube-consul-registrator](https://github.com/allenkim-qe/kube-consul-registrator) is the service that can handle consul registration and deregistration while kube-consul-registrator run into the Kubernetes cluster.
+[kube-consul-registrator](https://github.com/coolexplorer/kube-consul-registrator) is the service that can handle consul registration and deregistration while kube-consul-registrator run into the Kubernetes cluster.
 
 ## Getting Started
 
