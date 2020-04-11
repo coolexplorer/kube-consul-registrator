@@ -37,7 +37,7 @@ consul-registrator/service-id: <string>
 consul-registrator/service-name: <string>
 consul-registrator/service-port: <string>
 consul-registrator/service-tag: <string[]>
-consul-registrator/service-meta-<key>:<value>
+consul-registrator/service-meta-<key>: <value>
 ```
 Kubernetes definistion example
 ```
@@ -61,7 +61,7 @@ spec:
         consul-registrator/service-name: bar
         consul-registrator/service-port: 80
         consul-registrator/service-tag: "tag1,tag2"         # comma separated string
-        consul-registrator/service-meta-type:test           # add metadata [type:test]
+        consul-registrator/service-meta-type: "test"           # add metadata [type:test]
     spec:
       serviceAccountName: consul-register
       containers:
