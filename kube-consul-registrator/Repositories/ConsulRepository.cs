@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Consul;
+using System.Diagnostics.CodeAnalysis;
 
 namespace kube_consul_registrator.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class ConsulRepository : IConsulRepository 
     {
         private readonly IConsulClient _consul;
