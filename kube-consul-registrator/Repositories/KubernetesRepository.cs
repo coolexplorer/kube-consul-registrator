@@ -4,9 +4,11 @@ using k8s;
 using kube_consul_registrator.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace kube_consul_registrator.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class KubernetesRepository : IKubernetesRepository
     {
         private readonly Kubernetes _client;
