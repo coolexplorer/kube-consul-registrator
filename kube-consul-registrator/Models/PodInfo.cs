@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using k8s.Models;
 
 namespace kube_consul_registrator.Models
 {
+    [ExcludeFromCodeCoverage]
     public class PodInfo
     {
         public string Name { get; set; }

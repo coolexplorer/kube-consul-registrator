@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace kube_consul_registrator.Const
 {
+    [ExcludeFromCodeCoverage]
     public static class Annotations
     {
         public const string EABLED = "consul-registrator/enabled";

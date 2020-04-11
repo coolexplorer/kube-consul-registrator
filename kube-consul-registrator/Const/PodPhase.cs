@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace kube_consul_registrator.Const
 {
+    [ExcludeFromCodeCoverage]
     public static class PodPhase
     {
         public static string PENDING = "Pending";
