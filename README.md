@@ -82,11 +82,11 @@ spec:
 ### Installing
 
 To use this service, you need to create kube-consul-registrator pod with authorization to get the cluster information from the cluster. Please refer to the files that I added in the repository.
-- [Deployment definition](k8s/kube-consul-registrator.yaml)
-- [Service definition](k8s/kube-consul-registrator.yaml)
-- [Service Account definition](k8s/kube-consul-registrator.yaml)
-- [ClusterRoleBinding definition](k8s/kube-consul-registrator.yaml)
-- [ClusterRole](k8s/kube-consul-registrator.yaml)
+- [Deployment definition](kube-consul-registrator/k8s/kube-consul-registrator.yaml)
+- [Service definition](kube-consul-registrator/k8s/kube-consul-registrator.yaml)
+- [Service Account definition](kube-consul-registrator/k8s/kube-consul-registrator.yaml)
+- [ClusterRoleBinding definition](kube-consul-registrator/k8s/kube-consul-registrator.yaml)
+- [ClusterRole](kube-consul-registrator/k8s/kube-consul-registrator.yaml)
 
 ## Built With
 
