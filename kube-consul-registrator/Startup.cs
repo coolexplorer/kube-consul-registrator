@@ -12,9 +12,11 @@ using kube_consul_registrator.Repositories;
 using Consul;
 using AutoMapper;
 using kube_consul_registrator.Configurations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace kube_consul_registrator
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)
