@@ -13,6 +13,7 @@ using Consul;
 using AutoMapper;
 using kube_consul_registrator.Configurations;
 using System.Diagnostics.CodeAnalysis;
+using k8s;
 
 namespace kube_consul_registrator
 {
@@ -41,6 +42,9 @@ namespace kube_consul_registrator
             {
                 consulConfig.Address = new Uri("http://" + EnvironmentVariables.ConsulAddress);
             }));
+            services.AddSingleton<IKubernetes, Kubernetes>(p => 
+                new Kubernetes(KubernetesClientConfiguration.InClusterConfig())
+            );
             services.AddSingleton<IConsulRepository, ConsulRepository>();
             services.AddAutoMapper(Assembly.GetAssembly(this.GetType()));
         }

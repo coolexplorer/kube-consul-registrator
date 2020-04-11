@@ -1,4 +1,5 @@
 using System;
+using k8s;
 using kube_consul_registrator.Configurations;
 using kube_consul_registrator.Services;
 using Microsoft.Extensions.DependencyInjection;

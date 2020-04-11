@@ -8,15 +8,14 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace kube_consul_registrator.Repositories
 {
-    [ExcludeFromCodeCoverage]
     public class KubernetesRepository : IKubernetesRepository
     {
-        private readonly Kubernetes _client;
+        private readonly IKubernetes _client;
         private readonly ILogger<KubernetesRepository> _logger;
-        public KubernetesRepository(ILogger<KubernetesRepository> logger)
+        public KubernetesRepository(IKubernetes client, ILogger<KubernetesRepository> logger)
         {
+            _client = client;
             _logger = logger;
-            _client = new Kubernetes(KubernetesClientConfiguration.InClusterConfig());
         }
 
         public async Task<IEnumerable<PodInfo>> GetPods(string ns = "default")
