@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace kube_consul_registrator.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class KubernetesRepository : IKubernetesRepository
     {
         private readonly IKubernetes _client;

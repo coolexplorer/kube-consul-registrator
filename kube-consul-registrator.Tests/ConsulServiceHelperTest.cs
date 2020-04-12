@@ -74,7 +74,7 @@ namespace kube_consul_registrator.Tests
                                 }
                             };
 
-            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj1Str = JsonConvert.SerializeObject(expectedDto);
             var obj2Str = JsonConvert.SerializeObject(result);
 
             Assert.True(obj1Str.Equals(obj2Str));
@@ -99,7 +99,7 @@ namespace kube_consul_registrator.Tests
                                 }
                             };
 
-            var obj1Str = JsonConvert.SerializeObject(registrationDto);
+            var obj1Str = JsonConvert.SerializeObject(expectedDto);
             var obj2Str = JsonConvert.SerializeObject(result);
 
             Assert.True(obj1Str.Equals(obj2Str));
