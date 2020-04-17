@@ -49,7 +49,7 @@ namespace kube_consul_registrator.Tests
         [Fact]
         public void GetDeletedPods_ReturnPodInfoList()
         {
-            var cadidates = _consulHelper.GetDeletedPods(GetTestPods());
+            var cadidates = _consulHelper.GetDeletedPods(GetTestPods(), null);
 
             var result = Assert.IsType<List<string>>(cadidates);
             Assert.Single(result);
@@ -153,6 +153,27 @@ namespace kube_consul_registrator.Tests
                     }
                 }
             };
+        }
+
+        private List<PodInfo> GetTestRegisterCandidatePods()
+        {
+            return new List<PodInfo>()
+            {
+                new PodInfo()
+                {
+                    Name = "report",
+                    NodeName = "node1",
+                    Ip = "127.0.0.1",
+                    Containers = null,
+                    Phase = PodPhase.RUNNING,
+                    Annotations = new Dictionary<string, string>()
+                    {
+                        {Annotations.EABLED_ANNOTATION, "true"},
+                        {Annotations.SERVICE_ID_ANNOTATION, "pushgateway"},
+                        {Annotations.SERVICE_NAME_ANNOTATION, "pushgateway"},
+                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                    }
+                }            };
         }
 
         private IDictionary<string, AgentService> GetTestConsulServices()

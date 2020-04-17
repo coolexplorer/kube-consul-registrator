@@ -96,7 +96,7 @@ namespace kube_consul_registrator.Services
 
             _logger.LogDebug("deRegisterCandidates: [{0}]", string.Join(",", deRegisterCandidates));
 
-            var deletedPods = _consulServiceHelper.GetDeletedPods(wholePods.ToList());
+            var deletedPods = _consulServiceHelper.GetDeletedPods(wholePods.ToList(), registerCandidates);
 
             _logger.LogDebug("deletedPods: [{0}]", string.Join(",", deletedPods));
 
