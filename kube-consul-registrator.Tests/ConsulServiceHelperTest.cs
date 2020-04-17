@@ -171,10 +171,10 @@ namespace kube_consul_registrator.Tests
                     Phase = PodPhase.RUNNING,
                     Annotations = new Dictionary<string, string>()
                     {
-                        {Annotations.EABLED_ANNOTATION, "true"},
-                        {Annotations.SERVICE_ID_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_NAME_ANNOTATION, "pushgateway"},
-                        {Annotations.SERVICE_METADATA_ANNOTATION + "test", "test"}
+                        {Annotations.EABLED, "true"},
+                        {Annotations.SERVICE_ID, "pushgateway"},
+                        {Annotations.SERVICE_NAME, "pushgateway"},
+                        {Annotations.SERVICE_METADATA + "test", "test"}
                     }
                 }            };
         }
