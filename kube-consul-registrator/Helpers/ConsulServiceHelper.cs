@@ -44,7 +44,12 @@ namespace kube_consul_registrator.Helpers
             var podIds = wholePods?.Select(p => p.Name).ToList();
             var registerCondidateIds = registerCandidates?.Select(p => p.Name).ToList();
 
-            return _consulServices?.Keys.Where(k => !podIds.Contains(k) && !registerCondidateIds.Contains(k)).ToList();
+            if (registerCondidateIds != null)
+            {
+                podIds = podIds.Where(p => !registerCondidateIds.Contains(p)).ToList();
+            }
+
+            return _consulServices?.Keys.Where(k => !podIds.Contains(k)).ToList();
         }
 
         public ConsulRegistrationDto CreateRegitration(PodInfo podInfo)
