@@ -111,7 +111,6 @@ namespace kube_consul_registrator.Tests
         {
             _mockConsul.Setup(c => c.Agent.ServiceDeregister(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(GetWriteResult()));
 
-
             var task = _consulRepo.DeregisterService("consul");
             task.Wait();
 
