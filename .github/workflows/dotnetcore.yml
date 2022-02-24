@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test kube-consul-registrator.Tests/kube-consul-registrator.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: ./kube-consul-registrator.Tests/coverage.opencover.xml
